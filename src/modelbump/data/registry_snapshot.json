@@ -1,0 +1,296 @@
+{
+  "version": "2026.09",
+  "generated": "2026-09-30",
+  "note": "Bundled offline snapshot. Overlaid by the surfacelock registry when installed, and by MODELBUMP_REGISTRY when set. Unknown models always report cost=null.",
+  "models": [
+    {
+      "name": "gpt-4.1",
+      "provider": "openai",
+      "input_price_per_mtok": 2.0,
+      "cached_input_price_per_mtok": 0.5,
+      "output_price_per_mtok": 8.0,
+      "context_window": 1047576,
+      "released": "2025-04-14",
+      "retirement_date": "2026-10-14",
+      "successor": "gpt-5",
+      "aliases": [
+        "gpt-4.1-2025-04-14"
+      ]
+    },
+    {
+      "name": "gpt-4.1-mini",
+      "provider": "openai",
+      "input_price_per_mtok": 0.4,
+      "cached_input_price_per_mtok": 0.1,
+      "output_price_per_mtok": 1.6,
+      "context_window": 1047576,
+      "released": "2025-04-14",
+      "retirement_date": "2026-10-14",
+      "successor": "gpt-5-mini",
+      "aliases": []
+    },
+    {
+      "name": "gpt-4o",
+      "provider": "openai",
+      "input_price_per_mtok": 2.5,
+      "cached_input_price_per_mtok": 1.25,
+      "output_price_per_mtok": 10.0,
+      "context_window": 128000,
+      "released": "2024-05-13",
+      "retirement_date": "2026-05-13",
+      "successor": "gpt-4.1",
+      "aliases": [
+        "gpt-4o-2024-05-13",
+        "gpt-4o-2024-08-06"
+      ]
+    },
+    {
+      "name": "gpt-4o-mini",
+      "provider": "openai",
+      "input_price_per_mtok": 0.15,
+      "cached_input_price_per_mtok": 0.075,
+      "output_price_per_mtok": 0.6,
+      "context_window": 128000,
+      "released": "2024-07-18",
+      "retirement_date": "2026-05-13",
+      "successor": "gpt-4.1-mini",
+      "aliases": []
+    },
+    {
+      "name": "gpt-5",
+      "provider": "openai",
+      "input_price_per_mtok": 1.25,
+      "cached_input_price_per_mtok": 0.125,
+      "output_price_per_mtok": 10.0,
+      "context_window": 400000,
+      "released": "2025-08-07",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": [
+        "gpt-5-2025-08-07"
+      ]
+    },
+    {
+      "name": "gpt-5-mini",
+      "provider": "openai",
+      "input_price_per_mtok": 0.25,
+      "cached_input_price_per_mtok": 0.025,
+      "output_price_per_mtok": 2.0,
+      "context_window": 400000,
+      "released": "2025-08-07",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "o3",
+      "provider": "openai",
+      "input_price_per_mtok": 2.0,
+      "cached_input_price_per_mtok": 0.5,
+      "output_price_per_mtok": 8.0,
+      "context_window": 200000,
+      "released": "2025-04-16",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "o4-mini",
+      "provider": "openai",
+      "input_price_per_mtok": 1.1,
+      "cached_input_price_per_mtok": 0.275,
+      "output_price_per_mtok": 4.4,
+      "context_window": 200000,
+      "released": "2025-04-16",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "claude-3-5-sonnet-20241022",
+      "provider": "anthropic",
+      "input_price_per_mtok": 3.0,
+      "cached_input_price_per_mtok": 0.3,
+      "output_price_per_mtok": 15.0,
+      "context_window": 200000,
+      "released": "2024-10-22",
+      "retirement_date": "2026-10-28",
+      "successor": "claude-sonnet-4-5",
+      "aliases": [
+        "claude-3-5-sonnet-latest"
+      ]
+    },
+    {
+      "name": "claude-3-7-sonnet-20250219",
+      "provider": "anthropic",
+      "input_price_per_mtok": 3.0,
+      "cached_input_price_per_mtok": 0.3,
+      "output_price_per_mtok": 15.0,
+      "context_window": 200000,
+      "released": "2025-02-24",
+      "retirement_date": "2026-02-19",
+      "successor": "claude-sonnet-4-5",
+      "aliases": [
+        "claude-3-7-sonnet-latest"
+      ]
+    },
+    {
+      "name": "claude-sonnet-4-5",
+      "provider": "anthropic",
+      "input_price_per_mtok": 3.0,
+      "cached_input_price_per_mtok": 0.3,
+      "output_price_per_mtok": 15.0,
+      "context_window": 200000,
+      "released": "2025-09-29",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": [
+        "claude-sonnet-4-5-20250929"
+      ]
+    },
+    {
+      "name": "claude-opus-4-1",
+      "provider": "anthropic",
+      "input_price_per_mtok": 15.0,
+      "cached_input_price_per_mtok": 1.5,
+      "output_price_per_mtok": 75.0,
+      "context_window": 200000,
+      "released": "2025-08-05",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "claude-haiku-4-5",
+      "provider": "anthropic",
+      "input_price_per_mtok": 1.0,
+      "cached_input_price_per_mtok": 0.1,
+      "output_price_per_mtok": 5.0,
+      "context_window": 200000,
+      "released": "2025-10-15",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "gemini-2.0-flash",
+      "provider": "google",
+      "input_price_per_mtok": 0.1,
+      "cached_input_price_per_mtok": 0.025,
+      "output_price_per_mtok": 0.4,
+      "context_window": 1048576,
+      "released": "2025-02-05",
+      "retirement_date": "2026-02-05",
+      "successor": "gemini-2.5-flash",
+      "aliases": []
+    },
+    {
+      "name": "gemini-2.5-pro",
+      "provider": "google",
+      "input_price_per_mtok": 1.25,
+      "cached_input_price_per_mtok": 0.31,
+      "output_price_per_mtok": 10.0,
+      "context_window": 1048576,
+      "released": "2025-06-17",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "gemini-2.5-flash",
+      "provider": "google",
+      "input_price_per_mtok": 0.3,
+      "cached_input_price_per_mtok": 0.075,
+      "output_price_per_mtok": 2.5,
+      "context_window": 1048576,
+      "released": "2025-06-17",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "llama-3.3-70b-instruct",
+      "provider": "bedrock",
+      "input_price_per_mtok": 0.72,
+      "cached_input_price_per_mtok": null,
+      "output_price_per_mtok": 0.72,
+      "context_window": 128000,
+      "released": "2024-12-06",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "mistral-large-2411",
+      "provider": "mistral",
+      "input_price_per_mtok": 2.0,
+      "cached_input_price_per_mtok": null,
+      "output_price_per_mtok": 6.0,
+      "context_window": 131000,
+      "released": "2024-11-18",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "deepseek-chat",
+      "provider": "deepseek",
+      "input_price_per_mtok": 0.27,
+      "cached_input_price_per_mtok": 0.07,
+      "output_price_per_mtok": 1.1,
+      "context_window": 128000,
+      "released": "2024-12-26",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": [
+        "deepseek-v3"
+      ]
+    },
+    {
+      "name": "qwen2.5-72b-instruct",
+      "provider": "alibaba",
+      "input_price_per_mtok": 0.35,
+      "cached_input_price_per_mtok": null,
+      "output_price_per_mtok": 0.4,
+      "context_window": 131072,
+      "released": "2024-09-19",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": []
+    },
+    {
+      "name": "mock-stable",
+      "provider": "mock",
+      "input_price_per_mtok": 1.0,
+      "cached_input_price_per_mtok": 0.5,
+      "output_price_per_mtok": 2.0,
+      "context_window": 128000,
+      "released": "2025-01-01",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": [
+        "mock-stable-v1",
+        "stable",
+        "verbose",
+        "strict-json",
+        "refusenik",
+        "broken",
+        "slow"
+      ]
+    },
+    {
+      "name": "mock-drifty",
+      "provider": "mock",
+      "input_price_per_mtok": 1.0,
+      "cached_input_price_per_mtok": 0.5,
+      "output_price_per_mtok": 2.0,
+      "context_window": 128000,
+      "released": "2026-01-01",
+      "retirement_date": null,
+      "successor": null,
+      "aliases": [
+        "drifty"
+      ]
+    }
+  ]
+}

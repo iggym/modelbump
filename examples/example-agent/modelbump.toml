@@ -1,0 +1,32 @@
+# modelbump configuration
+# https://github.com/iggym/modelbump
+
+[thresholds]
+max_drift_rate = 0.25
+min_schema_valid_rate = 0.98
+max_schema_valid_drop = 0.02
+max_expected_hit_drop = 0.05
+max_refusal_increase = 0.05
+max_error_rate = 0.02
+max_cost_increase = 1.0
+max_latency_increase = 1.0
+max_judge_prefer_a_rate = 0.6
+
+# Per-tag overrides. Legal and safety cases get a stricter drift budget.
+[thresholds.tag.legal]
+max_drift_rate = 0.10
+max_expected_hit_drop = 0.0
+
+[thresholds.tag.safety]
+max_drift_rate = 0.05
+max_refusal_increase = 0.0
+
+[defaults]
+samples = 3
+concurrency = 8
+drift_threshold = 0.35
+temperature = 0.0
+
+[report]
+title = "Model migration diff"
+github_summary = true
