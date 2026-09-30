@@ -1,0 +1,157 @@
+name: "modelbump behavioral diff"
+description: "Diff two model versions on your own suite and gate the PR on the verdict."
+author: "iggym"
+
+branding:
+  icon: "git-compare"
+  color: "purple"
+
+inputs:
+  from:
+    description: "Baseline model spec, e.g. gpt-4.1 or anthropic:claude-3-5-sonnet-20241022"
+    required: true
+  to:
+    description: "Candidate model spec, e.g. gpt-5"
+    required: true
+  suite:
+    description: "Path to a suite file or directory"
+    required: false
+    default: "suite.jsonl"
+  samples:
+    description: "Samples per case per model"
+    required: false
+    default: "3"
+  judge:
+    description: "Model spec for the optional pairwise judge (empty disables it)"
+    required: false
+    default: ""
+  thresholds:
+    description: "Path to a modelbump.toml with [thresholds]"
+    required: false
+    default: ""
+  max-cost:
+    description: "Abort if the projected cost exceeds this many USD"
+    required: false
+    default: ""
+  comment:
+    description: "Post or update a sticky PR comment with the drift table"
+    required: false
+    default: "true"
+  fail-on-violation:
+    description: "Fail the job when the verdict is FAIL"
+    required: false
+    default: "true"
+  version:
+    description: "modelbump version to install"
+    required: false
+    default: "0.1.0"
+
+outputs:
+  pass:
+    description: "'true' when the verdict passed"
+    value: ${{ steps.diff.outputs.pass }}
+  drift_rate:
+    description: "Fraction of cases flagged as drifted"
+    value: ${{ steps.diff.outputs.drift_rate }}
+  report:
+    description: "Path to the rendered HTML report"
+    value: ${{ steps.diff.outputs.report }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install modelbump
+      shell: bash
+      run: |
+        python -m pip install --quiet --upgrade pip
+        python -m pip install --quiet "modelbump==${{ inputs.version }}"
+
+    - name: Run the behavioral diff
+      id: diff
+      shell: bash
+      env:
+        MODELBUMP_FROM: ${{ inputs.from }}
+        MODELBUMP_TO: ${{ inputs.to }}
+        MODELBUMP_SUITE: ${{ inputs.suite }}
+        MODELBUMP_SAMPLES: ${{ inputs.samples }}
+        MODELBUMP_JUDGE: ${{ inputs.judge }}
+        MODELBUMP_THRESHOLDS: ${{ inputs.thresholds }}
+        MODELBUMP_MAX_COST: ${{ inputs.max-cost }}
+        MODELBUMP_FAIL: ${{ inputs.fail-on-violation }}
+      run: |
+        set -uo pipefail
+
+        args=(diff
+          --from "$MODELBUMP_FROM"
+          --to "$MODELBUMP_TO"
+          --suite "$MODELBUMP_SUITE"
+          --samples "$MODELBUMP_SAMPLES"
+          --no-progress
+          --out modelbump-report)
+
+        if [ -n "$MODELBUMP_JUDGE" ]; then args+=(--judge "$MODELBUMP_JUDGE"); fi
+        if [ -n "$MODELBUMP_THRESHOLDS" ]; then args+=(--config "$MODELBUMP_THRESHOLDS"); fi
+        if [ -n "$MODELBUMP_MAX_COST" ]; then args+=(--max-cost "$MODELBUMP_MAX_COST"); fi
+
+        set +e
+        modelbump "${args[@]}"
+        status=$?
+        set -e
+
+        report=modelbump-report/report.json
+        pass=$(python -c "import json;print(str(json.load(open('$report'))['verdict']['pass']).lower())")
+        rate=$(python -c "import json;print(round(json.load(open('$report'))['summary']['drift_rate'],4))")
+
+        {
+          echo "pass=$pass"
+          echo "drift_rate=$rate"
+          echo "report=modelbump-report/report.html"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "### modelbump: \`$MODELBUMP_FROM\` → \`$MODELBUMP_TO\`" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        echo "Verdict: **$([ "$pass" = "true" ] && echo PASS || echo FAIL)** · drift rate $rate" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        cat modelbump-report/report.md >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$status" -eq 2 ]; then
+          echo "::error::modelbump aborted (budget or usage error)"
+          exit 2
+        fi
+        if [ "$MODELBUMP_FAIL" = "true" ] && [ "$pass" != "true" ]; then
+          echo "::error::modelbump verdict is FAIL — see the drift table above"
+          exit 1
+        fi
+
+    - name: Upload the report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: modelbump-report
+        path: modelbump-report/
+        if-no-files-found: warn
+
+    - name: Post or update the sticky PR comment
+      if: always() && inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        marker="<!-- modelbump-report -->"
+        body_file=modelbump-report/report.md
+        if [ ! -f "$body_file" ]; then
+          echo "no report to comment"
+          exit 0
+        fi
+        pr=${{ github.event.pull_request.number }}
+        repo="${{ github.repository }}"
+        existing=$(gh api "repos/$repo/issues/$pr/comments" --paginate \
+          --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n1 || true)
+        if [ -n "$existing" ]; then
+          gh api -X PATCH "repos/$repo/issues/comments/$existing" -F body=@"$body_file" >/dev/null
+          echo "updated comment $existing"
+        else
+          gh api -X POST "repos/$repo/issues/$pr/comments" -F body=@"$body_file" >/dev/null
+          echo "created sticky comment"
+        fi
